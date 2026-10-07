@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RetinaCare AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="side">
+  <div class="brand"><span class="iris"></span>RetinaCare AI</div>
+  <nav id="nav">
+    <button data-view="dashboard" class="on">Dashboard</button>
+    <button data-view="screen">Screen Patient</button>
+    <button data-view="history">History</button>
+    <button data-view="about">About</button>
+    <button data-view="model">Model Information</button>
+  </nav>
+  <p class="demo-note">Demo mode: results come from a mock model, not a trained network.</p>
+</aside>
+
+<main>
+  <section id="dashboard" class="view on">
+    <h1>Dashboard</h1>
+    <div class="stats">
+      <div><b id="s-total">0</b><span>Images screened</span></div>
+      <div><b id="s-refer">0</b><span>Referred to a specialist</span></div>
+      <div><b id="s-poor">0</b><span>Rejected for poor quality</span></div>
+    </div>
+    <button class="primary" data-go="screen">Screen a patient</button>
+  </section>
+
+  <section id="screen" class="view">
+    <h1>Screen Patient</h1>
+    <div class="row">
+      <label>Patient name<input id="p-name" placeholder="e.g. A. Kumar"></label>
+      <label>Patient ID<input id="p-id" placeholder="e.g. P-1042"></label>
+    </div>
+    <label class="drop" id="drop">
+      <input type="file" id="files" accept="image/*" multiple hidden>
+      Drop fundus images here or click to choose (you can add several)
+    </label>
+    <div id="results"></div>
+  </section>
+
+  <section id="history" class="view">
+    <h1>History</h1>
+    <table><thead><tr><th>Time</th><th>Patient</th><th>Image</th><th>Result</th><th>Confidence</th><th>Status</th></tr></thead>
+    <tbody id="hist-body"></tbody></table>
+    <p id="hist-empty" class="muted">No screenings yet. Screen a patient to see results here.</p>
+    <button id="clear-hist">Clear history</button>
+  </section>
+
+  <section id="about" class="view">
+    <h1>About</h1>
+    <p>RetinaCare AI helps screen retinal fundus photographs for diabetic retinopathy (DR). It supports, and never replaces, a clinician's judgement. Every result needs specialist review.</p>
+    <h2>How an image is processed</h2>
+    <ol class="flow">
+      <li>Upload</li><li>Quality assessment</li><li>Quality check (a poor image stops only that image)</li>
+      <li>Preprocessing</li><li>EfficientNet-B0</li><li>5-class DR classification</li>
+      <li>Confidence</li><li>Safety status</li><li>Result</li><li>Specialist review</li>
+    </ol>
+  </section>
+
+  <section id="model" class="view">
+    <h1>Model Information</h1>
+    <dl>
+      <dt>Architecture</dt><dd>EfficientNet-B0</dd>
+      <dt>Classes</dt><dd>0 No DR, 1 Mild, 2 Moderate, 3 Severe, 4 Proliferative</dd>
+      <dt>Input</dt><dd>224 × 224 RGB fundus image</dd>
+      <dt>Current backend</dt><dd id="backend-state">Mock model (demo)</dd>
+    </dl>
+    <p class="muted">To use a real model, set <code>USE_BACKEND = true</code> in app.js and run the FastAPI server in /backend.</p>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
